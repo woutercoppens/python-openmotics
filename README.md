@@ -9,23 +9,11 @@
 [![Code Coverage][codecov-shield]][codecov]
 [![Code Quality][code-quality-shield]][code-quality]
 
-[![Sponsor Frenck via GitHub Sponsors][github-sponsors-shield]][github-sponsors]
-
-[![Support Frenck on Patreon][patreon-shield]][patreon]
-
-Asynchronous Python client for the Quby ToonAPI.
+Asynchronous Python client for the OpenMotics API.
 
 ## About
 
-An asynchronous python client for the Qubby ToonAPI to control Quby thermostats.
-
-These thermostats are also sold as:
-
-- Eneco Toon
-- Engie Electrabel Boxx
-- Viesgo
-
-They all use the same API endpoint, thus this library can be used.
+An asynchronous python client for the OpenMotics API to control the outputs.
 
 This library is created to support the integration in
 [Home Assistant](https://www.home-assistant.io).
@@ -138,7 +126,7 @@ check [the contributor's page][contributors].
 
 MIT License
 
-Copyright (c) 2020 Franck Nijhof
+Copyright (c) 2021 Wouter Coppens
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
