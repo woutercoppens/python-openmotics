@@ -1,20 +1,20 @@
 """Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
-from cached_property import cached_property
-from typing import TYPE_CHECKING, Any, Dict, Optional
-import asyncio
 
-if TYPE_CHECKING:
-    from ...client import Api  # pylint: disable=R0401
+from typing import TYPE_CHECKING, Any, Optional
+
+from cached_property import cached_property
 
 from ...util import feature_used
-
 from .groupactions import Groupactions
 from .inputs import Inputs
 from .lights import Lights
 from .outputs import Outputs
 from .sensors import Sensors
 from .shutters import Shutters
+
+if TYPE_CHECKING:
+    from ...client import Api  # pylint: disable=R0401
 
 
 class Installations:
@@ -84,29 +84,18 @@ class Installations:
     def shutters(self):
         return Shutters(api_client=self.api_client)
 
-    @staticmethod
-    def from_dict(
-        data: Dict[str, Any],
-    ) -> Installation:
-        """Return an Agreement object from a data dictionary."""
-        return Installation(
-            id=data.get("id"),
-            name=data.get("name"),
-            user_role=data.get("user_role"),
-            features=data.get("features"),
-        )
-
-    async def all(
+    def all(
         self,
-        filter: Optional[str] = None,
-    ):
+        installation_filter: Optional[str] = None,
+    ) -> Any:
         """
         {
             'id': 1,
             'name': 'John Doe',
             'description': '',
             'gateway_model': 'openmotics',
-            '_acl': {'configure': {'allowed': True}, 'view': {'allowed': True}, 'control': {'allowed': True}},
+            '_acl': {'configure': {'allowed': True},
+                     'view': {'allowed': True}, 'control': {'allowed': True}},
             '_version': 1.0,
             'user_role': {'role': 'ADMIN', 'user_id': 1},
             'registration_key': 'xxxxx-xxxx-xxxxxx-xxxxxx',
@@ -117,16 +106,23 @@ class Installations:
             'flags': {'UNREAD_NOTIFICATIONS': 0, 'ONLINE': None}
         }
         """
-        path = f"/base/installations"
-        return await self.api_client.get(path)
+        path = "/base/installations"
+        if installation_filter:
+            query_params = {"filter": installation_filter}
+            return self.api_client.get(
+                path=path,
+                params=query_params,
+            )
 
-    async def discovery(
+        return self.api_client.get(path)
+
+    def discovery(
         self,
     ):
-        path = f"/base/discovery"
-        return await self.api_client.get(path)
+        path = "/base/discovery"
+        return self.api_client.get(path)
 
-    async def by_id(
+    def by_id(
         self,
         installation_id: str = None,
     ):
@@ -136,7 +132,8 @@ class Installations:
             'name': 'John Doe',
             'description': '',
             'gateway_model': 'openmotics',
-            '_acl': {'configure': {'allowed': True}, 'view': {'allowed': True}, 'control': {'allowed': True}},
+            '_acl': {'configure': {'allowed': True}, 'view': {'allowed': True},
+                    'control': {'allowed': True}},
             '_version': 1.0, 'user_role': {'role': 'ADMIN', 'user_id': 1},
             'registration_key': 'xxxxx-xxxxx-xxxxxxx',
             'platform': 'CLASSIC',
@@ -161,48 +158,53 @@ class Installations:
         }
         """
         path = f"/base/installations/{installation_id}"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def status_by_id(
+    def status_by_id(
         self,
         installation_id: str = None,
-    )  -> Optional[Dict[str, Union[bool, int, str]]]:
+    ) -> Any:
         """
         Function implemented to return the status of all connected devices in one call
         """
         self.status = {
-            "outlets": None,
-            "lights": None,
-            "shutters": None,
-            "groupsactions": None,
-            "sensors": None,
+            "outlets": {},
+            "lights": {},
+            "shutters": {},
+            "groupsactions": {},
+            "sensors": {},
         }
-        
+
         # inst_features = {}
-        installation = await self.by_id(installation_id=installation_id)
-        inst_features = installation['features']
-    
+        installation = self.by_id(installation_id=installation_id)
+        inst_features = installation["features"]
+
         # outlets & lights: (an output can be a light or an outlet)
-        if feature_used( features=inst_features, feat_to_check='outputs'):
-            outlets = None
-            outlets = await self.outputs.outlets(installation_id)
-            if outlets:
-                self.status["outlets"] = outlets
-            
-            lights = None
-            lights = await self.outputs.lights(installation_id)
-            if lights:
-                self.status["lights"] = lights
-        if feature_used( features=inst_features, feat_to_check='shutters'):
+        if feature_used(features=inst_features, feat_to_check="outputs"):
+            outputs = None
+            outputs = self.outputs.all(installation_id)
+            if outputs:
+                self.status["outputs"] = outputs
+
+        if feature_used(features=inst_features, feat_to_check="shutters"):
             shutters = None
-            shutters = await self.shutters.all(installation_id)
+            shutters = self.shutters.all(installation_id)
             if shutters:
                 self.status["shutters"] = shutters
 
-        self.status["groupactions"] = await self.groupactions.all(installation_id)
+        groupactions = None
+        groupactions = self.groupactions.all(installation_id)
+        if groupactions:
+            self.status["groupactions"] = groupactions
 
-        self.status["sensors"] = await self.sensors.all(installation_id)
+        sensors = None
+        sensors = self.sensors.all(installation_id)
+        if sensors:
+            self.status["sensors"] = sensors
 
-        print(type(self.status))
+        lights = None
+        lights = self.lights.all(installation_id)
+        if lights:
+            self.status["lights"] = lights
 
         return self.status

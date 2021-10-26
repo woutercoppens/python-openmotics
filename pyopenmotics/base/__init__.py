@@ -1,13 +1,15 @@
 from __future__ import annotations
-from cached_property import cached_property
-# import asyncio
 
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from ..client import Api  # pylint: disable=R0401
+from cached_property import cached_property
+
+# import asyncio
 
 from .installations import Installations
+
+if TYPE_CHECKING:
+    from ..client import Api  # pylint: disable=R0401
 
 
 class Base:

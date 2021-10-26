@@ -1,16 +1,16 @@
 """Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
-import asyncio
+# import asyncio
 import json
+import logging
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from ...client import Api  # pylint: disable=R0401
 
-import logging
-
 logger = logging.getLogger(__name__)
+
 
 class Outputs:
     id: Optional[str] = None
@@ -22,46 +22,34 @@ class Outputs:
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
 
-    @staticmethod
-    def from_dict(
-        data: Dict[str, Any],
-    ) -> Outputs:
-        """Return an Agreement object from a data dictionary."""
-        return Outputs(
-            id=data.get("id"),
-            name=data.get("name"),
-            user_role=data.get("user_role"),
-            features=data.get("features"),
-        )
-
-    async def all(
+    def all(
         self,
         installation_id: str = None,
-    ):
+    ) -> Any:
         """
         [{
-            'name': 'name1',
-            'type': 'OUTLET',
-            'capabilities': ['ON_OFF'],
-            'location': {'floor_coordinates': {'x': None, 'y': None},
-            'installation_id': 21,
-            'gateway_id': 408,
-            'floor_id': None,
-            'room_id': None},
-            'metadata': None,
-            'status': {'on': False, 'locked': False, 'manual_override': False},
-            'last_state_change': 1633099611.275243,
-            'id': 18,
-            '_version': 1.0
-            },{
-            'name': 'name2',
-            'type': 'OUTLET',
-            ...
+          'name': 'name1',
+          'type': 'OUTLET',
+          'capabilities': ['ON_OFF'],
+          'location': {'floor_coordinates': {'x': None, 'y': None},
+          'installation_id': 21,
+          'gateway_id': 408,
+          'floor_id': None,
+          'room_id': None},
+          'metadata': None,
+          'status': {'on': False, 'locked': False, 'manual_override': False},
+          'last_state_change': 1633099611.275243,
+          'id': 18,
+          '_version': 1.0
+          },{
+          'name': 'name2',
+          'type': 'OUTLET',
+          ...
         """
         path = f"/base/installations/{installation_id}/outputs"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def by_filter(
+    def by_filter(
         self,
         installation_id: str = None,
         output_filter: str = None,
@@ -87,13 +75,13 @@ class Outputs:
             ...
         """
         path = f"/base/installations/{installation_id}/outputs"
-        query_params = {'filter':output_filter}
-        return await self.api_client.get(
-            path=path, 
+        query_params = {"filter": output_filter}
+        return self.api_client.get(
+            path=path,
             params=query_params,
-            )
-        
-    async def by_id(
+        )
+
+    def by_id(
         self,
         installation_id: str = None,
         output_id: str = None,
@@ -109,24 +97,25 @@ class Outputs:
             'floor_id': None,
             'room_id': None},
             'metadata': None,
-            'status': {'on': False, 'locked': False, 'value': 100, 'manual_override': False},
+            'status': {'on': False, 'locked': False,
+                       'value': 100, 'manual_override': False},
             'last_state_change': 1634799514.671482,
             'id': 70,
             '_version': 1.0
         }
         """
         path = f"/base/installations/{installation_id}/outputs/{output_id}"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def toggle(
+    def toggle(
         self,
         installation_id: str = None,
         output_id: str = None,
     ):
         path = f"/base/installations/{installation_id}/outputs/{output_id}/toggle"
-        return await self.api_client.post(path)
+        return self.api_client.post(path)
 
-    async def turn_on(
+    def turn_on(
         self,
         installation_id: str = None,
         output_id: str = None,
@@ -134,9 +123,9 @@ class Outputs:
     ):
         path = f"/base/installations/{installation_id}/outputs/{output_id}/turn_on"
         payload = {"value": value}
-        return await self.api_client.post(path, json=payload)
+        return self.api_client.post(path, body=payload)
 
-    async def turn_off(
+    def turn_off(
         self,
         installation_id: str = None,
         output_id: Optional[str] = None,
@@ -147,9 +136,9 @@ class Outputs:
         else:
             # Turn off light with id
             path = f"/base/installations/{installation_id}/outputs/{output_id}/turn_off"
-        return await self.api_client.post(path)
+        return self.api_client.post(path)
 
-    async def location(
+    def location(
         self,
         installation_id: str = None,
         output_id: str = None,
@@ -167,44 +156,44 @@ class Outputs:
                 },
             }
         )
-        return await self.api_client.post(path, data=payload)
+        return self.api_client.post(path, body=payload)
 
-    async def by_type(
-        self, 
-        installation_id: str = None,
-        output_type: str= None,
-    ):
-        output_filter = json.dumps({'type': output_type.upper()})
-        return await self.by_filter(
-            installation_id = installation_id,
-            output_filter = output_filter,
-            )
-
-    async def lights(
+    def by_type(
         self,
         installation_id: str = None,
-        ):
-        return await self.by_type(
-            installation_id = installation_id,
-            output_type = 'LIGHT',
-            )
+        output_type: str = None,
+    ):
+        output_filter = json.dumps({"type": output_type.upper()})
+        return self.by_filter(
+            installation_id=installation_id,
+            output_filter=output_filter,
+        )
 
-    async def outlets(
+    def lights(
         self,
         installation_id: str = None,
-        ):
-        return await self.by_type(
-            installation_id = installation_id,
-            output_type = 'OUTLET',
-            )
-
-    async def by_usage(
-        self, 
-        installation_id: str = None,
-        output_usage: str= None,
     ):
-        output_filter = json.dumps({'usage': output_usage.upper()})
-        return await self.by_filter(
-            installation_id = installation_id,
-            output_filter = output_filter,
-            )
+        return self.by_type(
+            installation_id=installation_id,
+            output_type="LIGHT",
+        )
+
+    def outlets(
+        self,
+        installation_id: str = None,
+    ):
+        return self.by_type(
+            installation_id=installation_id,
+            output_type="OUTLET",
+        )
+
+    def by_usage(
+        self,
+        installation_id: str = None,
+        output_usage: str = None,
+    ):
+        output_filter = json.dumps({"usage": output_usage.upper()})
+        return self.by_filter(
+            installation_id=installation_id,
+            output_filter=output_filter,
+        )

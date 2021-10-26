@@ -1,9 +1,9 @@
 """Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
-import asyncio
+# import asyncio
 import json
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from ...client import Api  # pylint: disable=R0401
@@ -19,129 +19,123 @@ class Shutters:
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
 
-    @staticmethod
-    def from_dict(
-        data: Dict[str, Any],
-    ) -> Shutters:
-        """Return an Agreement object from a data dictionary."""
-        return Shutters(
-            id=data.get("id"),
-            name=data.get("name"),
-            user_role=data.get("user_role"),
-            features=data.get("features"),
-        )
-
-    async def all(
+    def all(
         self,
         installation_id: str = None,
-        filter: Optional[str] = None,
-    ):
+        shutter_filter: Optional[str] = None,
+    ) -> Any:
         path = f"/base/installations/{installation_id}/shutters"
-        if filter:
-            query_params = {"filter": filter}
-            return await self.api_client.get(path, params=query_params)
-        
-        return await self.api_client.get(path)
+        if shutter_filter:
+            query_params = {"filter": shutter_filter}
+            return self.api_client.get(path, params=query_params)
 
-    async def by_id(
+        return self.api_client.get(path)
+
+    def by_id(
         self,
         installation_id: str = None,
         shutter_id: str = None,
     ):
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def up(
+    def up(
         self,
         installation_id: str = None,
         shutter_id: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/up"
-        return await self.api_client.post(path)
+        path = f"/base/installations/{installation_id}/shutters/{shutter_id}/up"
+        return self.api_client.post(path)
 
-    async def down(
+    def down(
         self,
         installation_id: str = None,
         shutter_id: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/down"
-        return await self.api_client.post(path)
+        path = f"/base/installations/{installation_id}/shutters/{shutter_id}/down"
+        return self.api_client.post(path)
 
-    async def stop(
+    def stop(
         self,
         installation_id: str = None,
         shutter_id: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/stop"
-        return await self.api_client.post(path)
+        path = f"/base/installations/{installation_id}/shutters/{shutter_id}/stop"
+        return self.api_client.post(path)
 
     # def change_direction()
     # Deprecated in favor of .../shutters/:id/up and .../shutters/:id/down.
-    
-    async def change_position(
+
+    def change_position(
         self,
         installation_id: str = None,
         shutter_id: str = None,
-        position: str= None,
+        position: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/change_position"
+        # E501 line too long
+        path = (
+            f"/base/installations/{installation_id}"
+            f"/shutters/{shutter_id}/change_position"
+        )
         payload = json.dumps(
             {
                 "position": position,
             }
         )
-        return await self.api_client.post(path, data=payload)
+        return self.api_client.post(path, data=payload)
 
-
-    async def change_relative_position(
+    def change_relative_position(
         self,
         installation_id: str = None,
         shutter_id: str = None,
-        offset: str= None,
+        offset: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/change_relative_position"
+        # E501 line too long
+        path = (
+            f"/base/installations/{installation_id}"
+            f"/shutters/{shutter_id}/change_relative_position"
+        )
         payload = json.dumps(
             {
                 "offset": offset,
             }
         )
-        return await self.api_client.post(path, data=payload)
+        return self.api_client.post(path, data=payload)
 
-    async def lock(
+    def lock(
         self,
         installation_id: str = None,
         shutter_id: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/lock"
-        return await self.api_client.post(path)
+        path = f"/base/installations/{installation_id}/shutters/{shutter_id}/lock"
+        return self.api_client.post(path)
 
-    async def unlock(
+    def unlock(
         self,
         installation_id: str = None,
         shutter_id: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/unlock"
-        return await self.api_client.post(path)
+        path = f"/base/installations/{installation_id}/shutters/{shutter_id}/unlock"
+        return self.api_client.post(path)
 
-    async def preset(
+    def preset(
         self,
         installation_id: str = None,
         shutter_id: str = None,
-        position: str= None,
+        position: str = None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/preset"
+        path = f"/base/installations/{installation_id}/shutters/{shutter_id}/preset"
         payload = json.dumps(
             {
                 "position": position,
             }
         )
-        return await self.api_client.post(path, data=payload)
+        return self.api_client.post(path, body=payload)
 
-    async def move_to_preset(
+    def move_to_preset(
         self,
         installation_id: str = None,
         shutter_id: str = None,
-        position: str= None,
     ):
-        path = "/base/installations/{installation_id}/shutters/{shutter_id}/move"
-        return await self.api_client.post(path)
+        path = f"/base/installations/{installation_id}/shutters/{shutter_id}/move"
+        return self.api_client.post(path)

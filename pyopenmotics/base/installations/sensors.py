@@ -1,8 +1,9 @@
 """Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
 
+# import asyncio
 from typing import TYPE_CHECKING, Any, Optional
-import asyncio
+
 # import json
 
 if TYPE_CHECKING:
@@ -19,48 +20,36 @@ class Sensors:
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
 
-    @staticmethod
-    def from_dict(
-        data: Dict[str, Any],
-    ) -> Sensors:
-        """Return an Agreement object from a data dictionary."""
-        return Sensors(
-            id=data.get("id"),
-            name=data.get("name"),
-            user_role=data.get("user_role"),
-            features=data.get("features"),
-        )
-
-    async def all(
+    def all(
         self,
         installation_id: str = None,
-        filter: Optional[str] = None,
-    ):
+        sensors_filter: Optional[str] = None,
+    ) -> Any:
         path = f"/base/installations/{installation_id}/sensors"
-        if filter:
-            query_params = {"filter": filter}
-            return await self.api_client.get(path, params=query_params)
-        
-        return await self.api_client.get(path)
+        if sensors_filter:
+            query_params = {"filter": sensors_filter}
+            return self.api_client.get(path, params=query_params)
 
-    async def by_id(
+        return self.api_client.get(path)
+
+    def by_id(
         self,
         installation_id: str = None,
         sensor_id: str = None,
     ):
         path = f"/base/installations/{installation_id}/sensors/{sensor_id}"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def historical(
+    def historical(
         self,
         installation_id: str = None,
         sensor_id: str = None,
         start: Optional[str] = None,
         end: Optional[str] = None,
-        resolution: Optional[str] = '5m',
-        group_function: Optional[str] = 'last',
+        resolution: Optional[str] = "5m",
+        group_function: Optional[str] = "last",
         use_active_hours: Optional[bool] = False,
-        time_format: Optional[str] = 'iso'
+        time_format: Optional[str] = "iso",
     ):
         """
         {
@@ -79,5 +68,11 @@ class Sensors:
         "_error": null
         }
         """
-        path = f"/base/installations/{installation_id}/sensors/{sensor_id}/historical?start={start}&end={end}&resolution={resolution}&group_function={group_function}&use_active_hours={use_active_hours}&time_format={time_format}"
-        return await self.api_client.get(path)
+        # E501 line too long
+        path = (
+            f"/base/installations/{installation_id}/sensors/{sensor_id}"
+            f"/historical?start={start}&end={end}&resolution={resolution}"
+            f"&group_function={group_function}&use_active_hours={use_active_hours}"
+            f"&time_format={time_format}"
+        )
+        return self.api_client.get(path)

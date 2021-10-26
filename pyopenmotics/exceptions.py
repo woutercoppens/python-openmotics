@@ -1,6 +1,6 @@
 """Exceptions for the OpenMotics API."""
-import json
 from requests import Response
+
 
 class OpenMoticsError(Exception):
     """Generic OpenMotics API exception."""
@@ -10,9 +10,9 @@ class OpenMoticsError(Exception):
             # assume Response json
             response_json = response.json()
             super().__init__(response_json)
-            self.status_code = response_json['status_code']
-            self.error = response_json['error']
-            self.message = response_json['message']
+            self.status_code = response_json["status_code"]
+            self.error = response_json["error"]
+            self.message = response_json["message"]
         except Exception:
             super().__init__(response)
             self.status_code = response.status_code

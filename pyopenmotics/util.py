@@ -1,7 +1,6 @@
 """Collection of small utility functions for ToonAPI."""
 from datetime import datetime
 from typing import Any, Dict, Optional
-from yarl import URL
 
 
 def convert_temperature(temperature: int) -> Optional[float]:
@@ -57,24 +56,25 @@ def convert_lmin(value: int) -> Optional[float]:
         return None
     return round(float(value) / 60.0, 1)
 
+
 def feature_used(
     features: Dict = None,
     feat_to_check: str = None,
-    )  -> Optional[bool]:
-        """
-        This function checks if a feature is available and used
-            'features':
-                {'outputs': {'available': True, 'used': True, 'metadata': None},
-                 'thermostats': {'available': True, 'used': False, 'metadata': None},
-                 'energy': {'available': True, 'used': True, 'metadata': None},        
-        """
-        try:
-            f = features[feat_to_check]
-        except KeyError:
-            return False
-        for key, value in f.items():
-            if key in ["available"]:
-                feat_available = value
-            if key in ["used"]:
-                feat_used = value
-        return ( feat_available and feat_used)
+) -> Optional[bool]:
+    """
+    This function checks if a feature is available and used
+        'features':
+            {'outputs': {'available': True, 'used': True, 'metadata': None},
+             'thermostats': {'available': True, 'used': False, 'metadata': None},
+             'energy': {'available': True, 'used': True, 'metadata': None},
+    """
+    try:
+        f = features[feat_to_check]
+    except KeyError:
+        return False
+    for key, value in f.items():
+        if key in ["available"]:
+            feat_available = value
+        if key in ["used"]:
+            feat_used = value
+    return feat_available and feat_used

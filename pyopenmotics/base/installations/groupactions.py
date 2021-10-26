@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Optional
-import asyncio
+
+# import asyncio
+
 # import json
 
 if TYPE_CHECKING:
@@ -19,29 +21,17 @@ class Groupactions:
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
 
-    @staticmethod
-    def from_dict(
-        data: Dict[str, Any],
-    ) -> Groupactions:
-        """Return an Agreement object from a data dictionary."""
-        return Groupactions(
-            id=data.get("id"),
-            name=data.get("name"),
-            user_role=data.get("user_role"),
-            features=data.get("features"),
-        )
-
-    async def all(
+    def all(
         self,
         installation_id: str = None,
-        filter: Optional[str] = None,
-    ):
+        groupactions_filter: Optional[str] = None,
+    ) -> Any:
         """
         [{
             "_version": <version>,
             "actions": [
-                <action type>, <action number>, 
-                <action type>, <action number>, 
+                <action type>, <action number>,
+                <action type>, <action number>,
                 ...
             ],
         "id": <id>,
@@ -52,36 +42,40 @@ class Groupactions:
         }
         """
         path = f"/base/installations/{installation_id}/groupactions"
-        if filter:
-            query_params = {'filter': filter}
-            return await self.api_client.get(path, params=query_params)
-        
-        return await self.api_client.get(path)
+        if groupactions_filter:
+            query_params = {"filter": groupactions_filter}
+            return self.api_client.get(path, params=query_params)
 
-    async def by_id(
+        return self.api_client.get(path)
+
+    def by_id(
         self,
         installation_id: str = None,
         groupaction_id: str = None,
     ):
         path = f"/base/installations/{installation_id}/groupactions/{groupaction_id}"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def trigger(
+    def trigger(
         self,
         installation_id: str = None,
         groupaction_id: str = None,
     ):
-        path = f"/base/installations/{installation_id}/groupactions/{groupaction_id}/trigger"
-        return await self.api_client.post(path)
+        # E501 line too long
+        path = (
+            f"/base/installations/{installation_id}"
+            f"/groupactions/{groupaction_id}/trigger"
+        )
+        return self.api_client.post(path)
 
-    async def by_usage(
+    def by_usage(
         self,
         installation_id: str = None,
         groupaction_usage: str = None,
     ):
         path = f"/base/installations/{installation_id}/groupactions"
-        query_params = {'usage': groupaction_usage.upper()}
-        return await self.api_client.get(path, params=query_params)
+        query_params = {"usage": groupaction_usage.upper()}
+        return self.api_client.get(path, params=query_params)
 
     def scenes(self, installation_id):
         return self.by_usage(self, installation_id, "SCENE")

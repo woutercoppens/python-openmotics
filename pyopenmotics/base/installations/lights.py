@@ -1,13 +1,15 @@
 """Asynchronous Python client for OpenMotics.
 
-A light can be represented in 2 different ways: some gateways support lights with all their capabilities (color etc.), while others consider lights as a type of outputs (see /outputs).
+A light can be represented in 2 different ways: some gateways support lights with all
+their capabilities (color etc.), while others consider lights as a type of outputs
+(see /outputs).
 This section documents the gateways having full Light support.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
-import asyncio
+# import asyncio
 import json
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from ...client import Api  # pylint: disable=R0401
@@ -23,22 +25,10 @@ class Lights:
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
 
-    @staticmethod
-    def from_dict(
-        data: Dict[str, Any],
-    ) -> Lights:
-        """Return an Agreement object from a data dictionary."""
-        return Lights(
-            id=data.get("id"),
-            name=data.get("name"),
-            user_role=data.get("user_role"),
-            features=data.get("features"),
-        )
-
-    async def all(
+    def all(
         self,
         installation_id: str = None,
-    ):
+    ) -> Any:
         """
         [{
             'name': 'name1',
@@ -59,13 +49,13 @@ class Lights:
             ...
         """
         path = f"/base/installations/{installation_id}/lights"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def by_id(
+    def by_id(
         self,
         installation_id: str = None,
         light_id: str = None,
-    ):
+    ) -> Any:
         """
         {
             'name': 'name1',
@@ -84,9 +74,9 @@ class Lights:
         }
         """
         path = f"/base/installations/{installation_id}/lights/{light_id}"
-        return await self.api_client.get(path)
+        return self.api_client.get(path)
 
-    async def turn_on(
+    def turn_on(
         self,
         installation_id: str = None,
         light_id: str = None,
@@ -99,7 +89,7 @@ class Lights:
         blue: Optional[int] = None,
     ):
         path = f"/base/installations/{installation_id}/lights/{light_id}/turn_on"
-        """ { 
+        """ {
             "value": <0 - 100>,
             "temperature": <int>,
             "hue": <0 - 360>,
@@ -107,30 +97,30 @@ class Lights:
             "red": <0 - 255>,
             "green": <0 - 255>,
             "blue": <0 - 255>
-            } 
+            }
         """
         payload = json.dumps(
             {
-            "value": value,
-            "temperature": temperature,
-            "hue": hue,
-            "saturation": saturation,
-            "red": red,
-            "green": green,
-            "blue": blue,
+                "value": value,
+                "temperature": temperature,
+                "hue": hue,
+                "saturation": saturation,
+                "red": red,
+                "green": green,
+                "blue": blue,
             }
         )
-        return await self.api_client.post(path, json=payload)
+        return self.api_client.post(path, body=payload)
 
-    async def turn_off(
+    def turn_off(
         self,
         installation_id: str = None,
-        ligth_id: str = None,
+        light_id: str = None,
     ):
         path = f"/base/installations/{installation_id}/lights/{light_id}/turn_off"
-        return await self.api_client.post(path)
+        return self.api_client.post(path)
 
-    async def location(
+    def location(
         self,
         installation_id: str = None,
         light_id: str = None,
@@ -148,4 +138,4 @@ class Lights:
                 },
             }
         )
-        return await self.api_client.post(path, data=payload)
+        return self.api_client.post(path, body=payload)
