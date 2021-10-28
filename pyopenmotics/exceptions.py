@@ -13,7 +13,7 @@ class OpenMoticsError(Exception):
             self.status_code = response_json["status_code"]
             self.error = response_json["error"]
             self.message = response_json["message"]
-        except (Exception):
+        except (Exception,):
             super().__init__(response)
             self.status_code = response.status_code
             self.error = None
