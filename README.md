@@ -21,34 +21,16 @@ This library is created to support the integration in
 ## Installation
 
 ```bash
-pip install toonapi
+cd python-openmotics
+pip install .
 ```
 
 ## Usage
 
 ```python
-import asyncio
+import pyopenmotics
 
-from toonapi import Toon
-
-
-async def main():
-    """Show example on using the ToonAPI."""
-    async with Toon(token="put-in-token-here") as toon:
-        agreements = await toon.agreements()
-        print(agreements)
-
-        await toon.activate_agreement(agreement=agreements[0])
-
-        status = await toon.update()
-        print(status.gas_usage)
-        print(status.thermostat)
-        print(status.power_usage)
-
-
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+To be done
 ```
 
 ## Changelog & Releases
@@ -91,7 +73,7 @@ of all make goals that are available (including description):
 
 ```bash
 $ make
-Asynchronous Python client for the Quby ToonAPI.
+Asynchronous Python client for the OpenMotics API.
 
 Usage:
   make help                            Shows this message.
@@ -117,7 +99,7 @@ Usage:
 
 ## Authors & contributors
 
-The original setup of this repository is by [Franck Nijhof][frenck].
+The original setup of this repository is by [Wouter Coppens][woutercoppens].
 
 For a full list of all authors and contributors,
 check [the contributor's page][contributors].
@@ -146,22 +128,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-[build-shield]: https://github.com/frenck/python-toonapi/workflows/Continuous%20Integration/badge.svg
-[build]: https://github.com/frenck/python-toonapi/actions
-[code-quality-shield]: https://img.shields.io/lgtm/grade/python/g/frenck/python-toonapi.svg?logo=lgtm&logoWidth=18
-[code-quality]: https://lgtm.com/projects/g/frenck/python-toonapi/context:python
-[codecov-shield]: https://codecov.io/gh/frenck/python-toonapi/branch/master/graph/badge.svg
-[codecov]: https://codecov.io/gh/frenck/python-toonapi
+[build-shield]: https://github.com/woutercoppens/python-openmotics/workflows/Continuous%20Integration/badge.svg
+[build]: https://github.com/woutercoppens/python-openmotics/actions
 [contributors]: https://github.com/frenck/python-toonapi/graphs/contributors
-[frenck]: https://github.com/frenck
-[github-sponsors-shield]: https://frenck.dev/wp-content/uploads/2019/12/github_sponsor.png
-[github-sponsors]: https://github.com/sponsors/frenck
+[woutercoppens]: https://github.com/woutercoppens/python-openmotics
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
-[license-shield]: https://img.shields.io/github/license/frenck/python-toonapi.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2020.svg
-[patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
-[patreon]: https://www.patreon.com/frenck
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2021.svg
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-yellow.svg
-[releases-shield]: https://img.shields.io/github/release/frenck/python-toonapi.svg
-[releases]: https://github.com/frenck/python-toonapi/releases
+[releases]: https://github.com/woutercoppens/python-openmotics/releases
 [semver]: http://semver.org/spec/v2.0.0.html
