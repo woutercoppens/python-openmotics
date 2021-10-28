@@ -130,7 +130,7 @@ SOFTWARE.
 
 [build-shield]: https://github.com/woutercoppens/python-openmotics/workflows/Continuous%20Integration/badge.svg
 [build]: https://github.com/woutercoppens/python-openmotics/actions
-[contributors]: https://github.com/frenck/python-toonapi/graphs/contributors
+[contributors]: https://github.com/woutercoppens/python-openmotics/graphs/contributors
 [woutercoppens]: https://github.com/woutercoppens/python-openmotics
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2021.svg
