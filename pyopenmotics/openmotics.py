@@ -71,7 +71,7 @@ class BackendClient(Api):
             client_secret=self.client_secret,
             token_endpoint_auth_method="client_secret_post",
             scope=self.scope,
-            token_endpoint="<token endpoint>",
+            token_endpoint=str(self.token_url),
             grant_type="client_credentials",
             # token={"access_token": None, "expires_in": -100},
             update_token=self.token_saver,
@@ -131,14 +131,14 @@ class ServiceClient(Api):
         self.client = OAuth2Session(
             client=client,
             token_updater=self.token_saver,
-            auto_refresh_url=self.token_url,
+            auto_refresh_url=str(self.token_url),
             auto_refresh_kwargs=extra,
         )
         self.client.headers.update({"X-Bearer-Token-Type": "JWT"})
 
     def get_token(self):
         token_data = self.client.fetch_token(
-            token_url=self.token_url,
+            token_url=str(self.token_url),
             extra_claims={"registration_key": self.registration_key},
             scope=self.scope,
         )
@@ -163,7 +163,7 @@ class LegacyClient(Api):
         self.client = OAuth2Session(
             client=client,
             token_updater=self.token_saver,
-            auto_refresh_url=self.token_url,
+            auto_refresh_url=str(self.token_url),
             auto_refresh_kwargs=extra,
         )
 
