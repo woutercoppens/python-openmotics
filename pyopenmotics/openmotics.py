@@ -12,6 +12,8 @@ import time
 
 # from async_oauthlib import OAuth2Session
 from authlib.integrations.requests_client import OAuth2Session
+from authlib.oauth2.rfc7523 import ClientSecretJWT
+
 from oauthlib.oauth2 import (
     BackendApplicationClient,
     LegacyApplicationClient,
@@ -37,6 +39,7 @@ from .client import Api
 logger = logging.getLogger(__name__)
 
 
+# async_oauthlib
 # class BackendClient(Api):
 #     def __init__(self, client_id, client_secret, **kwargs):
 #         super(BackendClient, self).__init__(client_id, client_secret, **kwargs)
@@ -77,8 +80,9 @@ class BackendClient(Api):
             update_token=self.token_saver,
         )
 
-    def token_saver(self, token):
+    def token_saver(self, token, refresh_token=None, access_token=None):
         self.token = token
+        # self.get_token()
 
     def get_token(self):
         t_url = str(self.token_url)
@@ -149,7 +153,8 @@ class ServiceClient(Api):
         """
         self.token = token_data["access_token"]
 
-    def token_saver(self, token):
+    def token_saver(self, token, refresh_token=None, access_token=None):
+        # token_var = self.get_token()
         self.token = token
 
 
@@ -170,5 +175,5 @@ class LegacyClient(Api):
     def get_token(self):
         pass
 
-    def token_saver(self, token):
+    def token_saver(self, token, refresh_token=None, access_token=None):
         self.token = token

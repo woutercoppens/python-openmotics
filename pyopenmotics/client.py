@@ -111,7 +111,7 @@ class Api:
         # Subclasses should implement this!
         raise NotImplementedError()
 
-    def token_saver(self, token):
+    def token_saver(self, token, refresh_token=None, access_token=None): 
         # Subclasses should implement this!
         raise NotImplementedError()
 
