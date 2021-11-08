@@ -16,11 +16,11 @@ if TYPE_CHECKING:
 
 
 class Lights:
-    id: Optional[str] = None
-    name: Optional[str] = None
-    version: Optional[str] = None
-    user_role: Optional[list[str]] = None
-    features: Optional[list[str]] = None
+    # id: Optional[str] = None
+    # name: Optional[str] = None
+    # version: Optional[str] = None
+    # user_role: Optional[list[str]] = None
+    # features: Optional[list[str]] = None
 
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
@@ -89,16 +89,15 @@ class Lights:
         blue: Optional[int] = None,
     ):
         path = f"/base/installations/{installation_id}/lights/{light_id}/turn_on"
-        """ {
-            "value": <0 - 100>,
-            "temperature": <int>,
-            "hue": <0 - 360>,
-            "saturation": <0 - 100>,
-            "red": <0 - 255>,
-            "green": <0 - 255>,
-            "blue": <0 - 255>
-            }
-        """
+        # {
+        #     "value": <0 - 100>,
+        #     "temperature": <int>,
+        #     "hue": <0 - 360>,
+        #     "saturation": <0 - 100>,
+        #     "red": <0 - 255>,
+        #     "green": <0 - 255>,
+        #     "blue": <0 - 255>
+        #     }
         payload = json.dumps(
             {
                 "value": value,

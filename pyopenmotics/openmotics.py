@@ -12,8 +12,6 @@ import time
 
 # from async_oauthlib import OAuth2Session
 from authlib.integrations.requests_client import OAuth2Session
-from authlib.oauth2.rfc7523 import ClientSecretJWT
-
 from oauthlib.oauth2 import (
     BackendApplicationClient,
     LegacyApplicationClient,
@@ -21,6 +19,9 @@ from oauthlib.oauth2 import (
 )
 
 from .client import Api
+
+# from authlib.oauth2.rfc7523 import ClientSecretJWT
+
 
 # from time import sleep
 # from typing import Any, Awaitable, Callable, Dict, List, Optional

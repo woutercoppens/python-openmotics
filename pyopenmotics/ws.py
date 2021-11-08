@@ -10,14 +10,14 @@ from typing import TYPE_CHECKING
 # import async_timeout
 from yarl import URL
 
+from .const import OM_API_BASE_PATH, OM_API_HOST
+
 # from cached_property import cached_property
 # import socket
 # from typing import Any, Callable
 # from typing import Callable
 
 # import aiohttp
-
-from .const import OM_API_BASE_PATH, OM_API_HOST
 
 
 # from .exceptions import (

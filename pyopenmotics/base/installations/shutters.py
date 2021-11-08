@@ -10,7 +10,6 @@ if TYPE_CHECKING:
 
 
 class Shutters:
-
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
 

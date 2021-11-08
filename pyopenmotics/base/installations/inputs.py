@@ -1,18 +1,20 @@
 """Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+# from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
+
 
 if TYPE_CHECKING:
     from ...client import Api  # pylint: disable=R0401
 
 
 class Inputs:
-    id: Optional[str] = None
-    name: Optional[str] = None
-    version: Optional[str] = None
-    user_role: Optional[list[str]] = None
-    features: Optional[list[str]] = None
+    # id: Optional[str] = None
+    # name: Optional[str] = None
+    # version: Optional[str] = None
+    # user_role: Optional[list[str]] = None
+    # features: Optional[list[str]] = None
 
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
@@ -28,6 +30,6 @@ class Inputs:
         self,
         installation_id: str = None,
         input_id: str = None,
-    ):
+    ) -> Any:
         path = f"/base/installations/{installation_id}/inputs/{input_id}"
         return self.api_client.get(path)

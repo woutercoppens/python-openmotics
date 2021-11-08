@@ -51,11 +51,11 @@ class Installations:
     }
     """
 
-    id: Optional[str] = None
-    name: Optional[str] = None
-    version: Optional[str] = None
-    user_role: Optional[list[str]] = None
-    features: Optional[list[str]] = None
+    # id: Optional[str] = None
+    # name: Optional[str] = None
+    # version: Optional[str] = None
+    # user_role: Optional[list[str]] = None
+    # features: Optional[list[str]] = None
 
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
@@ -182,28 +182,28 @@ class Installations:
         # outlets & lights: (an output can be a light or an outlet)
         if feature_used(features=inst_features, feat_to_check="outputs"):
             outputs = None
-            outputs = self.outputs.all(installation_id)
+            outputs = self.outputs.all(installation_id)  # pylint: disable=E1101
             if outputs:
                 self.status["outputs"] = outputs
 
         if feature_used(features=inst_features, feat_to_check="shutters"):
             shutters = None
-            shutters = self.shutters.all(installation_id)
+            shutters = self.shutters.all(installation_id)  # pylint: disable=E1101
             if shutters:
                 self.status["shutters"] = shutters
 
         groupactions = None
-        groupactions = self.groupactions.all(installation_id)
+        groupactions = self.groupactions.all(installation_id)  # pylint: disable=E1101
         if groupactions:
             self.status["groupactions"] = groupactions
 
         sensors = None
-        sensors = self.sensors.all(installation_id)
+        sensors = self.sensors.all(installation_id)  # pylint: disable=E1101
         if sensors:
             self.status["sensors"] = sensors
 
         lights = None
-        lights = self.lights.all(installation_id)
+        lights = self.lights.all(installation_id)  # pylint: disable=E1101
         if lights:
             self.status["lights"] = lights
 

@@ -11,7 +11,6 @@ import time
 # from typing import Any, Awaitable, Callable, Dict, List, Optional
 from typing import Any, Optional
 
-
 import backoff
 
 # import requests
@@ -39,7 +38,6 @@ logger = logging.getLogger(__name__)
 
 # class Api(object):
 class Api:
-
     """Main class for handling connections with the OpenMotics API."""
 
     # installation_id: Optional[str] = None
@@ -111,7 +109,7 @@ class Api:
         # Subclasses should implement this!
         raise NotImplementedError()
 
-    def token_saver(self, token, refresh_token=None, access_token=None): 
+    def token_saver(self, token, refresh_token=None, access_token=None):
         # Subclasses should implement this!
         raise NotImplementedError()
 
@@ -143,11 +141,12 @@ class Api:
         # }
 
         logger.debug(
-            f"Request: method = {method}, \
-                url = {self.url},\
-                params = {params},\
-                json = {json},\
-                t = {int(time.time()*1000)}"
+            "Request: method = %s, url = %s, params = %s, json = %s, t = %s",
+            method,
+            self.url,
+            params,
+            json,
+            int(time.time() * 1000),
         )
 
         # if self.session is None:
@@ -204,17 +203,17 @@ class Api:
             resp.close()
 
             if resp.status_code == 429:
-                raise OpenMoticsRateLimitError(
-                    "Rate limit error has occurred with the OpenMotics API"
-                )
+                logger.error("Rate limit error has occurred with the OpenMotics API")
+                raise OpenMoticsRateLimitError()
 
             if content_type == "application/json":
-                raise OpenMoticsError(
-                    resp.status_code, json.loads(contents.decode("utf8"))
-                )
-            raise OpenMoticsError(
-                resp.status_code, {"message": contents.decode("utf8")}
-            )
+                logger.error(resp.status_code)
+                logger.error("message: %s", json.loads(contents.decode("utf8")))
+                raise OpenMoticsError()
+
+            logger.error(resp.status_code)
+            logger.error("message: %s", contents.decode("utf8"))
+            raise OpenMoticsError()
 
         # Handle empty response
         if resp.status_code == 204:

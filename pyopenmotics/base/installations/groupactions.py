@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 
 
 class Groupactions:
-
     def __init__(self, api_client: Api = None):
         self.api_client = api_client
 
@@ -73,4 +72,4 @@ class Groupactions:
         return self.api_client.get(path, params=query_params)
 
     def scenes(self, installation_id):
-        return self.by_usage(self, installation_id, "SCENE")
+        return self.by_usage(installation_id, "SCENE")
