@@ -1,7 +1,7 @@
 """Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 # import asyncio
 
@@ -12,29 +12,33 @@ if TYPE_CHECKING:
 
 
 class Groupactions:
-    def __init__(self, api_client: Api = None):
+    """Doc String."""
+
+    def __init__(self, api_client: Api):
+        """Doc String."""
         self.api_client = api_client
 
     def all(
         self,
         installation_id: str = None,
-        groupactions_filter: Optional[str] = None,
+        groupactions_filter: str | None = None,
     ) -> Any:
-        """
-        [{
-            "_version": <version>,
-            "actions": [
-                <action type>, <action number>,
-                <action type>, <action number>,
-                ...
-            ],
-        "id": <id>,
-        "location": {
-            "installation_id": <installation id>
-        },
-        "name": "<name>"
-        }
-        """
+        """Doc String."""
+
+        # [{
+        #     "_version": <version>,
+        #     "actions": [
+        #         <action type>, <action number>,
+        #         <action type>, <action number>,
+        #         ...
+        #     ],
+        # "id": <id>,
+        # "location": {
+        #     "installation_id": <installation id>
+        # },
+        # "name": "<name>"
+        # }
+
         path = f"/base/installations/{installation_id}/groupactions"
         if groupactions_filter:
             query_params = {"filter": groupactions_filter}
@@ -47,6 +51,7 @@ class Groupactions:
         installation_id: str = None,
         groupaction_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/groupactions/{groupaction_id}"
         return self.api_client.get(path)
 
@@ -55,6 +60,7 @@ class Groupactions:
         installation_id: str = None,
         groupaction_id: str = None,
     ):
+        """Doc String."""
         # E501 line too long
         path = (
             f"/base/installations/{installation_id}"
@@ -67,9 +73,11 @@ class Groupactions:
         installation_id: str = None,
         groupaction_usage: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/groupactions"
         query_params = {"usage": groupaction_usage.upper()}
         return self.api_client.get(path, params=query_params)
 
     def scenes(self, installation_id):
+        """Doc String."""
         return self.by_usage(installation_id, "SCENE")

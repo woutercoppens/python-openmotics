@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 
 class WebSocket:
-    def __init__(self, api_client: Api = None):
+    def __init__(self, api_client: Api):
         # if api_client is None:
         #     api_client = Api()
         self.api_client = api_client

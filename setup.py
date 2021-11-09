@@ -18,8 +18,13 @@ def read(*parts):
     """Read file."""
     filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), *parts)
     sys.stdout.write(filename)
-    with open(filename, encoding="utf-8", mode="rt") as fp:
+    with open(filename, encoding="utf-8") as fp:
         return fp.read()
+
+
+def requirements():
+    with open("requirements.txt") as fileobj:
+        return [line.strip() for line in fileobj]
 
 
 with open("README.md") as readme_file:
@@ -34,14 +39,13 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     description="Asynchronous Python client for the OpenMoticsAPI.",
     include_package_data=True,
-    install_requires=["aiohttp>=3.0.0", "backoff>=1.9.0", "yarl"],
+    install_requires=requirements(),
     keywords=[
         "openmotics",
         "homeassistant",

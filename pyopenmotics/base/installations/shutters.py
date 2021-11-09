@@ -3,21 +3,25 @@ from __future__ import annotations
 
 # import asyncio
 import json
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ...client import Api  # pylint: disable=R0401
 
 
 class Shutters:
-    def __init__(self, api_client: Api = None):
+    """Doc String."""
+
+    def __init__(self, api_client: Api):
+        """Doc String."""
         self.api_client = api_client
 
     def all(
         self,
         installation_id: str = None,
-        shutter_filter: Optional[str] = None,
+        shutter_filter: str | None = None,
     ) -> Any:
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters"
         if shutter_filter:
             query_params = {"filter": shutter_filter}
@@ -30,6 +34,7 @@ class Shutters:
         installation_id: str = None,
         shutter_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}"
         return self.api_client.get(path)
 
@@ -38,6 +43,7 @@ class Shutters:
         installation_id: str = None,
         shutter_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}/up"
         return self.api_client.post(path)
 
@@ -46,6 +52,7 @@ class Shutters:
         installation_id: str = None,
         shutter_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}/down"
         return self.api_client.post(path)
 
@@ -54,6 +61,7 @@ class Shutters:
         installation_id: str = None,
         shutter_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}/stop"
         return self.api_client.post(path)
 
@@ -66,6 +74,7 @@ class Shutters:
         shutter_id: str = None,
         position: str = None,
     ):
+        """Doc String."""
         # E501 line too long
         path = (
             f"/base/installations/{installation_id}"
@@ -76,7 +85,7 @@ class Shutters:
                 "position": position,
             }
         )
-        return self.api_client.post(path, data=payload)
+        return self.api_client.post(path, body=payload)
 
     def change_relative_position(
         self,
@@ -84,6 +93,7 @@ class Shutters:
         shutter_id: str = None,
         offset: str = None,
     ):
+        """Doc String."""
         # E501 line too long
         path = (
             f"/base/installations/{installation_id}"
@@ -94,13 +104,14 @@ class Shutters:
                 "offset": offset,
             }
         )
-        return self.api_client.post(path, data=payload)
+        return self.api_client.post(path, body=payload)
 
     def lock(
         self,
         installation_id: str = None,
         shutter_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}/lock"
         return self.api_client.post(path)
 
@@ -109,6 +120,7 @@ class Shutters:
         installation_id: str = None,
         shutter_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}/unlock"
         return self.api_client.post(path)
 
@@ -118,6 +130,7 @@ class Shutters:
         shutter_id: str = None,
         position: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}/preset"
         payload = json.dumps(
             {
@@ -131,5 +144,6 @@ class Shutters:
         installation_id: str = None,
         shutter_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/shutters/{shutter_id}/move"
         return self.api_client.post(path)

@@ -9,45 +9,51 @@ from __future__ import annotations
 
 # import asyncio
 import json
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 if TYPE_CHECKING:
     from ...client import Api  # pylint: disable=R0401
 
 
 class Lights:
+    """Doc String."""
+
     # id: Optional[str] = None
     # name: Optional[str] = None
     # version: Optional[str] = None
     # user_role: Optional[list[str]] = None
     # features: Optional[list[str]] = None
+    # payload: dict[str, any] | None = None
 
-    def __init__(self, api_client: Api = None):
+    def __init__(self, api_client: Api):
+        """Doc String."""
+
         self.api_client = api_client
 
     def all(
         self,
         installation_id: str = None,
     ) -> Any:
-        """
-        [{
-            'name': 'name1',
-            'capabilities': ['ON_OFF', 'RANGE', 'WHITE_TEMP', 'FULL_COLOR'],
-            'location': {
-                'floor_coordinates': {'x': None, 'y': None},
-                'installation_id': 1,
-                'floor_id': None,
-                'room_id': None}
-                }
-            'metadata': None,
-            'status': {'on': False, 'locked': False, 'manual_override': False},
-            'last_state_change': 1633099611.275243,
-            'id': 18,
-            '_version': 1.0
-            },{
-            'name': 'name2',
-            ...
-        """
+        """Doc String."""
+
+        # [{
+        #     'name': 'name1',
+        #     'capabilities': ['ON_OFF', 'RANGE', 'WHITE_TEMP', 'FULL_COLOR'],
+        #     'location': {
+        #         'floor_coordinates': {'x': None, 'y': None},
+        #         'installation_id': 1,
+        #         'floor_id': None,
+        #         'room_id': None}
+        #         }
+        #     'metadata': None,
+        #     'status': {'on': False, 'locked': False, 'manual_override': False},
+        #     'last_state_change': 1633099611.275243,
+        #     'id': 18,
+        #     '_version': 1.0
+        #     },{
+        #     'name': 'name2',
+        #     ...
+
         path = f"/base/installations/{installation_id}/lights"
         return self.api_client.get(path)
 
@@ -56,23 +62,24 @@ class Lights:
         installation_id: str = None,
         light_id: str = None,
     ) -> Any:
-        """
-        {
-            'name': 'name1',
-            'capabilities': ['ON_OFF', 'RANGE', 'WHITE_TEMP', 'FULL_COLOR'],
-            'location': {
-                'floor_coordinates': {'x': None, 'y': None},
-                'installation_id': 1,
-                'floor_id': None,
-                'room_id': None}
-                }
-            'metadata': None,
-            'status': {'on': False, 'locked': False, 'manual_override': False},
-            'last_state_change': 1633099611.275243,
-            'id': 18,
-            '_version': 1.0
-        }
-        """
+        """Doc String."""
+
+        # {
+        #     'name': 'name1',
+        #     'capabilities': ['ON_OFF', 'RANGE', 'WHITE_TEMP', 'FULL_COLOR'],
+        #     'location': {
+        #         'floor_coordinates': {'x': None, 'y': None},
+        #         'installation_id': 1,
+        #         'floor_id': None,
+        #         'room_id': None}
+        #         }
+        #     'metadata': None,
+        #     'status': {'on': False, 'locked': False, 'manual_override': False},
+        #     'last_state_change': 1633099611.275243,
+        #     'id': 18,
+        #     '_version': 1.0
+        # }
+
         path = f"/base/installations/{installation_id}/lights/{light_id}"
         return self.api_client.get(path)
 
@@ -80,14 +87,15 @@ class Lights:
         self,
         installation_id: str = None,
         light_id: str = None,
-        value: Optional[int] = 100,
-        temperature: Optional[int] = None,
-        hue: Optional[int] = None,
-        saturation: Optional[int] = None,
-        red: Optional[int] = None,
-        green: Optional[int] = None,
-        blue: Optional[int] = None,
+        value: int | None = 100,
+        temperature: int | None = None,
+        hue: int | None = None,
+        saturation: int | None = None,
+        red: int | None = None,
+        green: int | None = None,
+        blue: int | None = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/lights/{light_id}/turn_on"
         # {
         #     "value": <0 - 100>,
@@ -116,6 +124,7 @@ class Lights:
         installation_id: str = None,
         light_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/lights/{light_id}/turn_off"
         return self.api_client.post(path)
 
@@ -127,6 +136,8 @@ class Lights:
         floor_coordinates_x: str = None,
         floor_coordinates_y: str = None,
     ):
+        """Doc String."""
+
         path = f"/base/installations/{installation_id}/lights/{light_id}/location"
         payload = json.dumps(
             {

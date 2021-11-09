@@ -1,3 +1,4 @@
+"""Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -14,11 +15,16 @@ if TYPE_CHECKING:
 
 
 class Base:
+    """Docstring."""
+
     def __init__(self, api_client: Api = None):
+        """Docstring."""
+
         # if api_client is None:
         #     api_client = Api()
         self.api_client = api_client
 
     @cached_property
     def installations(self):
+        """Docstring."""
         return Installations(api_client=self.api_client)

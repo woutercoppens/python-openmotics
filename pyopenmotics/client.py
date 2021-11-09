@@ -9,12 +9,13 @@ import time
 # from abc import ABC, abstractmethod
 # from time import sleep
 # from typing import Any, Awaitable, Callable, Dict, List, Optional
-from typing import Any, Optional
+from typing import Any
 
 import backoff
 
 # import requests
 # from aiohttp import ClientError, ClientResponse, ClientSession
+from authlib.integrations.requests_client import OAuth2Session
 from cached_property import cached_property
 from oauthlib.oauth2 import TokenExpiredError
 
@@ -40,27 +41,22 @@ logger = logging.getLogger(__name__)
 class Api:
     """Main class for handling connections with the OpenMotics API."""
 
-    # installation_id: Optional[str] = None
-    # _installations: Optional[List[Installation]] = None
-    # _status: Optional[Status] = None
     _close_session: bool = False
-
-    # _webhook_refresh_timer_task: Optional[asyncio.TimerHandle] = None
-    # _webhook_url: Optional[str] = None
 
     def __init__(
         self,
         client_id: str,
         client_secret: str,
-        server: Optional[str] = OM_API_HOST,
-        port: Optional[int] = OM_API_PORT,
-        ssl: Optional[bool] = OM_API_SSL,
-        request_timeout: Optional[int] = 8,
-        user_agent: Optional[str] = None,
+        server: str | None = OM_API_HOST,
+        port: int | None = OM_API_PORT,
+        ssl: bool | None = OM_API_SSL,
+        request_timeout: int | None = 8,
+        user_agent: str | None = None,
     ) -> None:
+        """Initialize connection with the OpenMotics API."""
         self.token = None
         self.client = None
-        self.session = None
+        self.session: OAuth2Session = None
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -88,17 +84,16 @@ class Api:
 
     @cached_property
     def base(self):
+        """Object holding the base class."""
         return Base(api_client=self)
 
     @cached_property
     def ws(self):
+        """Object holding the base class."""
         return WebSocket(api_client=self)
 
-    def join_url(
-        self,
-        base: URL = None,
-        path: str = None,
-    ) -> URL:
+    def join_url(self, base: URL, path: str) -> URL:
+        """Docstring."""
         if path.startswith("/"):
             # Remove trailing /
             path = path[1:]
@@ -106,10 +101,14 @@ class Api:
         return self.url
 
     def get_token(self):
+        """Get Token."""
+
         # Subclasses should implement this!
         raise NotImplementedError()
 
     def token_saver(self, token, refresh_token=None, access_token=None):
+        """Save Token."""
+
         # Subclasses should implement this!
         raise NotImplementedError()
 
@@ -124,12 +123,11 @@ class Api:
         self,
         method: str = "GET",
         url: str = "",
-        json: Optional[dict[str, Any]] = None,
-        params: Optional[dict[str, Any]] = None,
+        json: dict[str, Any] | None = None,
+        params: dict[str, Any] | None = None,
         **kwargs,
-    ) -> Any:
-        """Handle a request to the Quby ToonAPI."""
-
+    ) -> dict[str, Any]:
+        """Handle a request to the OpenMotics API."""
         self.url = str(self.join_url(self.base_url, url))
 
         if self.token is None:
@@ -195,12 +193,10 @@ class Api:
             ) from exception
 
         content_type = resp.headers.get("Content-Type", "")
-
         # Error handling
         if (resp.status_code // 100) in [4, 5]:
             contents = resp.content
-            print(contents)
-            resp.close()
+            # resp.close()
 
             if resp.status_code == 429:
                 logger.error("Rate limit error has occurred with the OpenMotics API")
@@ -217,7 +213,7 @@ class Api:
 
         # Handle empty response
         if resp.status_code == 204:
-            return
+            return ""
 
         if "application/json" in content_type:
             response_data = resp.json().get("data")
@@ -227,6 +223,7 @@ class Api:
 
     def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         """Http Get.
+
         Requests the server to return specified resources.
         Args:
             path (str): api path
@@ -238,6 +235,7 @@ class Api:
 
     def post(self, path: str, body: dict[str, Any] | None = None) -> dict[str, Any]:
         """Http Post.
+
         Requests the server to update specified resources.
         Args:
             path (str): api path
@@ -249,6 +247,7 @@ class Api:
 
     def put(self, path: str, body: dict[str, Any] | None = None) -> dict[str, Any]:
         """Http Put.
+
         Requires the server to perform specified operations.
         Args:
             path (str): api path
@@ -260,6 +259,7 @@ class Api:
 
     def delete(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         """Http Delete.
+
         Requires the server to delete specified resources.
         Args:
             path (str): api path
@@ -270,6 +270,8 @@ class Api:
         return self.__request("DELETE", path, params, None)
 
     def root(self):
+        """Return user information."""
+
         # The current v1 implementation returns the current logged in user's information
         # and his (paid) features.
         path = "/"

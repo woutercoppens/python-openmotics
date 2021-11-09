@@ -3,13 +3,6 @@ from __future__ import annotations
 
 import logging
 
-# from abc import ABC, abstractmethod
-# import asyncio
-# import json
-# import socket
-# import jwt
-import time
-
 # from async_oauthlib import OAuth2Session
 from authlib.integrations.requests_client import OAuth2Session
 from oauthlib.oauth2 import (
@@ -19,6 +12,14 @@ from oauthlib.oauth2 import (
 )
 
 from .client import Api
+
+# from abc import ABC, abstractmethod
+# import asyncio
+# import json
+# import socket
+# import jwt
+# import time
+
 
 # from authlib.oauth2.rfc7523 import ClientSecretJWT
 
@@ -59,8 +60,11 @@ logger = logging.getLogger(__name__)
 
 # authlib.integrations.requests_client
 class BackendClient(Api):
+    """Docstring."""
+
     def __init__(self, client_id, client_secret, **kwargs):
-        super(BackendClient, self).__init__(client_id, client_secret, **kwargs)
+        """Doc String."""
+        super().__init__(client_id, client_secret, **kwargs)
         # def __init__(self, *args, **kwargs):
         #     # POP CLIENT_ID BEFORE calling super BackendClient
         #     client_id = kwargs.pop("client_id", None)
@@ -82,20 +86,15 @@ class BackendClient(Api):
         )
 
     def token_saver(self, token, refresh_token=None, access_token=None):
+        """Docstring."""
         self.token = token
         # self.get_token()
 
     def get_token(self):
-        t_url = str(self.token_url)
+        """Docstring."""
         self.token = self.session.fetch_token(
-            url=t_url,
+            url=str(self.token_url),
             grant_type="client_credentials",
-        )
-
-        logger.debug(
-            f"Request: token = {self.token}, \
-                url = {t_url},\
-                t = {int(time.time()*1000)}"
         )
 
 
@@ -118,9 +117,12 @@ class BackendClient(Api):
 
 
 class ServiceClient(Api):
+    """Docstring."""
+
     # NOT TESTED
     def __init__(self, registration_key, private_key, **kwargs):
-        super(ServiceClient, self).__init__(None, None, **kwargs)
+        """Doc String."""
+        super().__init__(None, None, **kwargs)
 
         self.scope = "control view"
         extra = {}
@@ -142,27 +144,32 @@ class ServiceClient(Api):
         self.client.headers.update({"X-Bearer-Token-Type": "JWT"})
 
     def get_token(self):
+        """Docstring."""
         token_data = self.client.fetch_token(
             token_url=str(self.token_url),
             extra_claims={"registration_key": self.registration_key},
             scope=self.scope,
         )
-        """{'token_type': 'Bearer',
-            'access_token': 'eyJhbGc...xYtE',
-            'expires_in': 3600,
-            'expires_at': 1617290467.734431}
-        """
+        # {'token_type': 'Bearer',
+        #     'access_token': 'eyJhbGc...xYtE',
+        #     'expires_in': 3600,
+        #     'expires_at': 1617290467.734431}
         self.token = token_data["access_token"]
 
     def token_saver(self, token, refresh_token=None, access_token=None):
+        """Docstring."""
         # token_var = self.get_token()
         self.token = token
 
 
 class LegacyClient(Api):
-    def __init__(self, username, password, client_id, client_secret, **kwargs):
+    """Doc String."""
+
+    # def __init__(self, username, password, client_id, client_secret, **kwargs):
+    def __init__(self, client_id, client_secret, **kwargs):
+        """Doc String."""
         # NOT TESTED
-        super(LegacyClient, self).__init__(client_id, client_secret, **kwargs)
+        super().__init__(client_id, client_secret, **kwargs)
         self.scope = "control view"
         extra = {"client_id": self.client_id, "client_secret": self.client_secret}
         client = LegacyApplicationClient(client_id=self.client_id)
@@ -174,7 +181,9 @@ class LegacyClient(Api):
         )
 
     def get_token(self):
+        """Docstring."""
         pass
 
     def token_saver(self, token, refresh_token=None, access_token=None):
+        """Docstring."""
         self.token = token

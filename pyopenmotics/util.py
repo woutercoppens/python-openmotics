@@ -1,6 +1,6 @@
-"""Collection of small utility functions for ToonAPI."""
+"""Collection of small utility functions for OpenMotics API."""
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 
 def convert_temperature(temperature: int) -> Optional[float]:
@@ -58,16 +58,15 @@ def convert_lmin(value: int) -> Optional[float]:
 
 
 def feature_used(
-    features: Dict = None,
-    feat_to_check: str = None,
+    features: dict,
+    feat_to_check: str,
 ) -> Optional[bool]:
-    """
-    This function checks if a feature is available and used
-        'features':
-            {'outputs': {'available': True, 'used': True, 'metadata': None},
-             'thermostats': {'available': True, 'used': False, 'metadata': None},
-             'energy': {'available': True, 'used': True, 'metadata': None},
-    """
+    """Check if a feature is available and used."""
+
+    # 'features':
+    #     {'outputs': {'available': True, 'used': True, 'metadata': None},
+    #      'thermostats': {'available': True, 'used': False, 'metadata': None},
+    #      'energy': {'available': True, 'used': True, 'metadata': None},
     try:
         f = features[feat_to_check]
     except KeyError:

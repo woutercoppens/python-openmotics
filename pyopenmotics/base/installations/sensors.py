@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 # import asyncio
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 # import json
 
@@ -11,20 +11,24 @@ if TYPE_CHECKING:
 
 
 class Sensors:
+    """Doc String."""
+
     # id: Optional[str] = None
     # name: Optional[str] = None
     # version: Optional[str] = None
     # user_role: Optional[list[str]] = None
     # features: Optional[list[str]] = None
 
-    def __init__(self, api_client: Api = None):
+    def __init__(self, api_client: Api):
+        """Doc String."""
         self.api_client = api_client
 
     def all(
         self,
         installation_id: str = None,
-        sensors_filter: Optional[str] = None,
+        sensors_filter: str | None = None,
     ) -> Any:
+        """Doc String."""
         path = f"/base/installations/{installation_id}/sensors"
         if sensors_filter:
             query_params = {"filter": sensors_filter}
@@ -37,6 +41,7 @@ class Sensors:
         installation_id: str = None,
         sensor_id: str = None,
     ):
+        """Doc String."""
         path = f"/base/installations/{installation_id}/sensors/{sensor_id}"
         return self.api_client.get(path)
 
@@ -44,30 +49,31 @@ class Sensors:
         self,
         installation_id: str = None,
         sensor_id: str = None,
-        start: Optional[str] = None,
-        end: Optional[str] = None,
-        resolution: Optional[str] = "5m",
-        group_function: Optional[str] = "last",
-        use_active_hours: Optional[bool] = False,
-        time_format: Optional[str] = "iso",
+        start: str | None = None,
+        end: str | None = None,
+        resolution: str | None = "5m",
+        group_function: str | None = "last",
+        use_active_hours: bool | None = False,
+        time_format: str | None = "iso",
     ):
-        """
-        {
-          "data": {
-            "time": "1970-01-01T00:10:00",
-            "tags": {
-                "sensor_id": "6",
-                "sensor_name": "Sensor 0",
-                "gateway_id": 1
-            },
-        "values": {
-          "temperature": 22.1
-            }
-        },
-        "_acl": null,
-        "_error": null
-        }
-        """
+        """Doc String."""
+
+        # {
+        #   "data": {
+        #     "time": "1970-01-01T00:10:00",
+        #     "tags": {
+        #         "sensor_id": "6",
+        #         "sensor_name": "Sensor 0",
+        #         "gateway_id": 1
+        #     },
+        # "values": {
+        #   "temperature": 22.1
+        #     }
+        # },
+        # "_acl": null,
+        # "_error": null
+        # }
+
         # E501 line too long
         path = (
             f"/base/installations/{installation_id}/sensors/{sensor_id}"
