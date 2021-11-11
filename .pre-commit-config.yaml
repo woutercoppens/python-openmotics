@@ -115,7 +115,7 @@ repos:
         language: system
         entry: poetry run no-commit-to-branch
         pass_filenames: false
-        always_run: true
+        always_run: false
         args:
           - --branch=main
       - id: poetry
