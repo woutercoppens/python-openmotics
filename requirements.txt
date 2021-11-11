@@ -1,5 +1,0 @@
-Authlib==0.15
-# async-oauthlib==0.0.9
-backoff==1.11.1
-cached_property==1.5.2
-yarl==1.7.2
