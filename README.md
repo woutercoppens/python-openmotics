@@ -68,43 +68,37 @@ Thank you for being involved! :heart_eyes:
 
 ## Setting up development environment
 
-In case you'd like to contribute, a `Makefile` has been included to ensure a
-quick start.
+This Python project is fully managed using the [Poetry][poetry] dependency
+manager. But also relies on the use of NodeJS for certain checks during
+development.
+
+You need at least:
+
+- Python 3.8+
+- [Poetry][poetry-install]
+- NodeJS 12+ (including NPM)
+
+To install all packages, including all development requirements:
 
 ```bash
-make venv
-source ./venv/bin/activate
-make dev
+npm install
+poetry install
 ```
 
-Now you can start developing, run `make` without arguments to get an overview
-of all make goals that are available (including description):
+As this repository uses the [pre-commit][pre-commit] framework, all changes
+are linted and tested with each commit. You can run all checks and tests
+manually, using the following command:
 
 ```bash
-$ make
-Asynchronous Python client for the OpenMotics API.
-
-Usage:
-  make help                            Shows this message.
-  make dev                             Set up a development environment.
-  make lint                            Run all linters.
-  make lint-black                      Run linting using black & blacken-docs.
-  make lint-flake8                     Run linting using flake8 (pycodestyle/pydocstyle).
-  make lint-pylint                     Run linting using PyLint.
-  make lint-mypy                       Run linting using MyPy.
-  make test                            Run tests quickly with the default Python.
-  make coverage                        Check code coverage quickly with the default Python.
-  make install                         Install the package to the active Python's site-packages.
-  make clean                           Removes build, test, coverage and Python artifacts.
-  make clean-all                       Removes all venv, build, test, coverage and Python artifacts.
-  make clean-build                     Removes build artifacts.
-  make clean-pyc                       Removes Python file artifacts.
-  make clean-test                      Removes test and coverage artifacts.
-  make clean-venv                      Removes Python virtual environment artifacts.
-  make dist                            Builds source and wheel package.
-  make release                         Release build on PyP
-  make venv                            Create Python venv environment.
+poetry run pre-commit run --all-files
 ```
+
+To run just the Python tests:
+
+```bash
+poetry run pytest
+```
+
 
 ## Authors & contributors
 
