@@ -1,7 +1,6 @@
 """Asynchronous Python client for OpenMotics."""
 from __future__ import annotations
 
-# import asyncio
 import json
 import logging
 from typing import TYPE_CHECKING, Any
@@ -13,24 +12,33 @@ logger = logging.getLogger(__name__)
 
 
 class Outputs:
-    """Doc String."""
+    """A Output object represents a output device.
 
-    # id: Optional[str] = None
-    # name: Optional[str] = None
-    # version: Optional[str] = None
-    # user_role: Optional[list[str]] = None
-    # features: Optional[list[str]] = None
+    An Output is connected to an appliance (e.g. a light, valve, socket, ...)
+    and can be used to control that appliance.
+    """
 
     def __init__(self, api_client: Api):
-        """Doc String."""
+        """Init the output object.
+
+        Args:
+            api_client: Api
+        """
         self.api_client = api_client
 
-    def all(
+    def all(  # noqa: A003
         self,
-        installation_id: str,
+        installation_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get a list of all output objects.
 
+        Args:
+            installation_id: int
+
+        Returns:
+            Dict with all outputs
+
+        # noqa: E800
         # [{
         #   'name': 'name1',
         #   'type': 'OUTLET',
@@ -49,17 +57,25 @@ class Outputs:
         #   'name': 'name2',
         #   'type': 'OUTLET',
         #   ...
-
+        """
         path = f"/base/installations/{installation_id}/outputs"
         return self.api_client.get(path)
 
     def by_filter(
         self,
-        installation_id: str,
+        installation_id: int,
         output_filter: str,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get a list of all output objects.
 
+        Args:
+            installation_id: int
+            output_filter: str
+
+        Returns:
+            Dict with all outputs
+
+        # noqa: E800
         # [{
         #     'name': 'name1',
         #     'type': 'OUTLET',
@@ -78,7 +94,7 @@ class Outputs:
         #     'name': 'name2',
         #     'type': 'OUTLET',
         #     ...
-
+        """
         path = f"/base/installations/{installation_id}/outputs"
         query_params = {"filter": output_filter}
         return self.api_client.get(
@@ -88,11 +104,19 @@ class Outputs:
 
     def by_id(
         self,
-        installation_id: str,
-        output_id: str,
+        installation_id: int,
+        output_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get output by id.
 
+        Args:
+            installation_id: int
+            output_id: int
+
+        Returns:
+            Returns a output with id
+
+        # noqa: E800
         # {
         #     'name': 'Dinning Table',
         #     'type': 'OUTLET',
@@ -109,36 +133,61 @@ class Outputs:
         #     'id': 70,
         #     '_version': 1.0
         # }
-
+        """
         path = f"/base/installations/{installation_id}/outputs/{output_id}"
         return self.api_client.get(path)
 
     def toggle(
         self,
-        installation_id: str,
-        output_id: str,
+        installation_id: int,
+        output_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Toggle a specified Output object.
+
+        Args:
+            installation_id: int
+            output_id: int
+
+        Returns:
+            Returns a output with id
+        """
         path = f"/base/installations/{installation_id}/outputs/{output_id}/toggle"
         return self.api_client.post(path)
 
     def turn_on(
         self,
-        installation_id: str,
-        output_id: str,
+        installation_id: int,
+        output_id: int,
         value: int | None = 100,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Turn on a specified Output object.
+
+        Args:
+            installation_id: int
+            output_id: int
+            value: <0 - 100>
+
+        Returns:
+            Returns a output with id
+        """
         path = f"/base/installations/{installation_id}/outputs/{output_id}/turn_on"
         payload = {"value": value}
         return self.api_client.post(path, json=payload)
 
     def turn_off(
         self,
-        installation_id: str,
-        output_id: str | None = None,
+        installation_id: int,
+        output_id: int | None = None,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Turn off a specified Output object.
+
+        Args:
+            installation_id: int
+            output_id: int
+
+        Returns:
+            Returns a output with id
+        """
         if output_id is None:
             # Turn off all lights
             path = f"/base/installations/{installation_id}/outputs/turn_off"
@@ -149,13 +198,24 @@ class Outputs:
 
     def location(
         self,
-        installation_id: str,
-        output_id: str,
+        installation_id: int,
+        output_id: int,
         floor_id: str = None,
         floor_coordinates_x: str = None,
         floor_coordinates_y: str = None,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get all output at this location.
+
+        Args:
+            installation_id: int
+            output_id: int
+            floor_id: str
+            floor_coordinates_x: str
+            floor_coordinates_y: str
+
+        Returns:
+            Returns the outputs at location
+        """
         path = f"/base/installations/{installation_id}/outputs/{output_id}/location"
         payload = json.dumps(
             {
@@ -170,10 +230,18 @@ class Outputs:
 
     def by_type(
         self,
-        installation_id: str,
+        installation_id: int,
         output_type: str,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get all outputs by type.
+
+        Args:
+            installation_id: int
+            output_type: int
+
+        Returns:
+            Returns a output with type
+        """
         output_filter = json.dumps({"type": output_type.upper()})
         return self.by_filter(
             installation_id=installation_id,
@@ -182,9 +250,16 @@ class Outputs:
 
     def lights(
         self,
-        installation_id: str,
+        installation_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get all outputs by type light.
+
+        Args:
+            installation_id: int
+
+        Returns:
+            Returns all lights
+        """
         return self.by_type(
             installation_id=installation_id,
             output_type="LIGHT",
@@ -192,9 +267,16 @@ class Outputs:
 
     def outlets(
         self,
-        installation_id: str,
+        installation_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get all outputs by type outlet.
+
+        Args:
+            installation_id: int
+
+        Returns:
+            Returns all outlets
+        """
         return self.by_type(
             installation_id=installation_id,
             output_type="OUTLET",
@@ -202,10 +284,18 @@ class Outputs:
 
     def by_usage(
         self,
-        installation_id: str,
+        installation_id: int,
         output_usage: str,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get all outputs by usage.
+
+        Args:
+            installation_id: int
+            output_usage: str
+
+        Returns:
+            Returns all outlets
+        """
         output_filter = json.dumps({"usage": output_usage.upper()})
         return self.by_filter(
             installation_id=installation_id,

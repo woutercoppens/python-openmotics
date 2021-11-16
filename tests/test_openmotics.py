@@ -5,8 +5,7 @@ from unittest.mock import patch
 import pytest
 
 from pyopenmotics import BackendClient
-from pyopenmotics.exceptions import ( 
-    # OpenMoticsConnectionTimeoutError,
+from pyopenmotics.exceptions import (  # OpenMoticsConnectionTimeoutError,
     OpenMoticsAuthenticationError,
     OpenMoticsConnectionError,
     OpenMoticsError,

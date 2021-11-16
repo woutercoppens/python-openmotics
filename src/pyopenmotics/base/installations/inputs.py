@@ -1,7 +1,10 @@
-"""Asynchronous Python client for OpenMotics."""
+"""Asynchronous Python client for OpenMotics.
+
+An Output is connected to an appliance (e.g. a light, valve, socket, ...)
+and can be used to control that appliance.
+"""
 from __future__ import annotations
 
-# from typing import TYPE_CHECKING, Any, Optional
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -9,31 +12,44 @@ if TYPE_CHECKING:
 
 
 class Inputs:
-    """Doc String."""
-
-    # id: Optional[str] = None
-    # name: Optional[str] = None
-    # version: Optional[str] = None
-    # user_role: Optional[list[str]] = None
-    # features: Optional[list[str]] = None
+    """A Input object represents a input device."""
 
     def __init__(self, api_client: Api):
-        """Doc String."""
+        """Init the input object.
+
+        Args:
+            api_client: Api
+        """
         self.api_client = api_client
 
-    def all(
+    def all(  # noqa: A003
         self,
-        installation_id: str,
+        installation_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get a list of all input objects.
+
+        Args:
+            installation_id: int
+
+        Returns:
+            Dict with all inputs
+        """
         path = f"/base/installations/{installation_id}/inputs"
         return self.api_client.get(path)
 
     def by_id(
         self,
-        installation_id: str,
-        input_id: str,
+        installation_id: int,
+        input_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get input by id.
+
+        Args:
+            installation_id: int
+            input_id: int
+
+        Returns:
+            Returns a input with id
+        """
         path = f"/base/installations/{installation_id}/inputs/{input_id}"
         return self.api_client.get(path)

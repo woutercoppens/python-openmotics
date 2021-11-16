@@ -99,7 +99,6 @@ To run just the Python tests:
 poetry run pytest
 ```
 
-
 ## Authors & contributors
 
 The original setup of this repository is by [Wouter Coppens][woutercoppens].

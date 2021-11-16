@@ -7,7 +7,6 @@ This section documents the gateways having full Light support.
 """
 from __future__ import annotations
 
-# import asyncio
 import json
 from typing import TYPE_CHECKING, Any
 
@@ -16,26 +15,30 @@ if TYPE_CHECKING:
 
 
 class Lights:
-    """Doc String."""
-
-    # id: Optional[str] = None
-    # name: Optional[str] = None
-    # version: Optional[str] = None
-    # user_role: Optional[list[str]] = None
-    # features: Optional[list[str]] = None
-    # payload: dict[str, any] | None = None
+    """A Light object represents a output device."""
 
     def __init__(self, api_client: Api):
-        """Doc String."""
+        """Init the light object.
+
+        Args:
+            api_client: Api
+        """
 
         self.api_client = api_client
 
-    def all(
+    def all(  # noqa: A003
         self,
-        installation_id: str,
+        installation_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get a list of all lights objects.
 
+        Args:
+            installation_id: int
+
+        Returns:
+            Dict with all lights
+
+        # noqa: E800
         # [{
         #     'name': 'name1',
         #     'capabilities': ['ON_OFF', 'RANGE', 'WHITE_TEMP', 'FULL_COLOR'],
@@ -53,17 +56,25 @@ class Lights:
         #     },{
         #     'name': 'name2',
         #     ...
-
+        """
         path = f"/base/installations/{installation_id}/lights"
         return self.api_client.get(path)
 
     def by_id(
         self,
-        installation_id: str,
-        light_id: str,
+        installation_id: int,
+        light_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get light by id.
 
+        Args:
+            installation_id: int
+            light_id: int
+
+        Returns:
+            Returns a light with id
+
+        # noqa: E800
         # {
         #     'name': 'name1',
         #     'capabilities': ['ON_OFF', 'RANGE', 'WHITE_TEMP', 'FULL_COLOR'],
@@ -79,14 +90,15 @@ class Lights:
         #     'id': 18,
         #     '_version': 1.0
         # }
-
+        """
         path = f"/base/installations/{installation_id}/lights/{light_id}"
         return self.api_client.get(path)
 
+    # pylint: disable=too-many-arguments
     def turn_on(
         self,
-        installation_id: str,
-        light_id: str,
+        installation_id: int,
+        light_id: int,
         value: int | None = 100,
         temperature: int | None = None,
         hue: int | None = None,
@@ -95,17 +107,23 @@ class Lights:
         green: int | None = None,
         blue: int | None = None,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Turn on a specified light object.
+
+        Args:
+            installation_id: int
+            light_id: int
+            value: <0 - 100>
+            temperature: <int>
+            hue: <0 - 360>
+            saturation: <0 - 100>
+            red: <0 - 255>
+            green: <0 - 255>
+            blue: <0 - 255>
+
+        Returns:
+            Returns a light with id
+        """
         path = f"/base/installations/{installation_id}/lights/{light_id}/turn_on"
-        # {
-        #     "value": <0 - 100>,
-        #     "temperature": <int>,
-        #     "hue": <0 - 360>,
-        #     "saturation": <0 - 100>,
-        #     "red": <0 - 255>,
-        #     "green": <0 - 255>,
-        #     "blue": <0 - 255>
-        #     }
         payload = json.dumps(
             {
                 "value": value,
@@ -121,22 +139,43 @@ class Lights:
 
     def turn_off(
         self,
-        installation_id: str,
-        light_id: str,
+        installation_id: int,
+        light_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Turn off a specified light object.
+
+        Args:
+            installation_id: int
+            light_id: int
+
+        Returns:
+            Returns a light with id
+        """
+
         path = f"/base/installations/{installation_id}/lights/{light_id}/turn_off"
         return self.api_client.post(path)
 
+    # pylint: disable=too-many-arguments
     def location(
         self,
-        installation_id: str,
-        light_id: str,
+        installation_id: int,
+        light_id: int,
         floor_id: str = None,
         floor_coordinates_x: str = None,
         floor_coordinates_y: str = None,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Set the location of a light.
+
+        Args:
+            installation_id: int
+            light_id: int
+            floor_id: str = None
+            floor_coordinates_x: str = None
+            floor_coordinates_y: str = None
+
+        Returns:
+            Dict
+        """
 
         path = f"/base/installations/{installation_id}/lights/{light_id}/location"
         payload = json.dumps(

@@ -18,8 +18,10 @@ if TYPE_CHECKING:
 
 
 class Installations:
-    """Object holding information of the OpenMotics installation."""
+    """Object holding information of the OpenMotics installation.
 
+    All actions related to Installations or a specific Installation.
+    # noqa: E800
     # {
     # "id": <id>,
     # "name": "<name>",
@@ -50,47 +52,92 @@ class Installations:
     #     },
     #     "registration_key": "<registration key>"
     # }
+    """
 
     def __init__(self, api_client: Api):
-        """Doc String."""
+        """Init the installations object.
+
+        Args:
+            api_client: Api
+        """
         self.api_client = api_client
 
     @cached_property
     def groupactions(self):
-        """Docstring."""
+        """cached_property.
+
+        Returns:
+            groupactions: all functions about groupactions
+        """
         return Groupactions(api_client=self.api_client)
 
     @cached_property
     def inputs(self):
-        """Docstring."""
+        """cached_property.
+
+        Returns:
+            inputs: all functions about inputs
+        """
         return Inputs(api_client=self.api_client)
 
     @cached_property
     def lights(self):
-        """Docstring."""
+        """cached_property.
+
+        Returns:
+            lights: all functions about lights
+        """
         return Lights(api_client=self.api_client)
 
     @cached_property
     def outputs(self):
-        """Docstring."""
+        """cached_property.
+
+        Returns:
+            outputs: all functions about outputs
+        """
         return Outputs(api_client=self.api_client)
 
     @cached_property
     def sensors(self):
-        """Docstring."""
+        """cached_property.
+
+        Returns:
+            sensors: all functions about sensors
+        """
         return Sensors(api_client=self.api_client)
 
     @cached_property
     def shutters(self):
-        """Docstring."""
+        """cached_property.
+
+        Returns:
+            shutters: all functions about shutters
+        """
         return Shutters(api_client=self.api_client)
 
-    def all(
+    def all(  # noqa: A003
         self,
         installation_filter: str | None = None,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """List all Installation objects.
 
+        Args:
+            installation_filter: str
+
+        Returns:
+            all installations objects
+
+        Optional filter (URL encoded JSON).
+            * size: When the size filter is specified, when specified
+            the matching Image metadata will be included in the response,
+            if any. Possible values: SMALL|MEDIUM|ORIGINAL
+            * gateways:
+                gateway_model: openmotics|somfy|sense|healthbox3
+            * openmotics:
+                platform: CLASSIC|CORE|CORE_PLUS|ESAFE
+
+        # noqa: E800
         # {
         #     'id': 1,
         #     'name': 'John Doe',
@@ -107,7 +154,7 @@ class Installations:
         #     'network': {'local_ip_address': '172.16.1.25'},
         #     'flags': {'UNREAD_NOTIFICATIONS': 0, 'ONLINE': None}
         # }
-
+        """
         path = "/base/installations"
         if installation_filter:
             query_params = {"filter": installation_filter}
@@ -121,16 +168,27 @@ class Installations:
     def discovery(
         self,
     ) -> dict[str, Any]:
-        """Docstring."""
+        """List all Installation objects.
+
+        Returns:
+            all installations objects
+        """
         path = "/base/discovery"
         return self.api_client.get(path)
 
     def by_id(
         self,
-        installation_id: str,
+        installation_id: int,
     ) -> dict[str, Any]:
-        """Doc String."""
+        """Get a single Installation object.
 
+        Args:
+            installation_id: int
+
+        Returns:
+            a single Installation object
+
+        # noqa: E800
         # {
         #     'id': 21,
         #     'name': 'John Doe',
@@ -160,15 +218,23 @@ class Installations:
         #          'ventilation', 'default_timer_disabled',
         #          '100_steps_dimmer', 'input_states']
         # }
+        """
         path = f"/base/installations/{installation_id}"
         return self.api_client.get(path)
 
     def status_by_id(
         self,
-        installation_id: str,
+        installation_id: int,
     ) -> dict[str, Any]:
-        """Return status of all connected devices in one call."""
-        self.status: dict[str, Any] = {
+        """Return status of all connected devices in one call.
+
+        Args:
+            installation_id: int
+
+        Returns:
+            Dict
+        """
+        status: dict[str, Any] = {
             "outlets": {},
             "lights": {},
             "shutters": {},
@@ -176,36 +242,27 @@ class Installations:
             "sensors": {},
         }
 
-        # inst_features = {}
         installation = self.by_id(installation_id=installation_id)
         inst_features = installation["features"]
 
         # outlets & lights: (an output can be a light or an outlet)
         if feature_used(features=inst_features, feat_to_check="outputs"):
-            outputs = None
-            outputs = self.outputs.all(installation_id)  # pylint: disable=E1101
-            if outputs:
-                self.status["outputs"] = outputs
+            if outputs := self.outputs.all(installation_id):  # pylint: disable=E1101
+                status["outputs"] = outputs
 
         if feature_used(features=inst_features, feat_to_check="shutters"):
-            shutters = None
-            shutters = self.shutters.all(installation_id)  # pylint: disable=E1101
-            if shutters:
-                self.status["shutters"] = shutters
+            if shutters := self.shutters.all(installation_id):  # pylint: disable=E1101
+                status["shutters"] = shutters
 
-        groupactions = None
-        groupactions = self.groupactions.all(installation_id)  # pylint: disable=E1101
-        if groupactions:
-            self.status["groupactions"] = groupactions
+        if groupactions := self.groupactions.all(
+            installation_id
+        ):  # pylint: disable=E1101
+            status["groupactions"] = groupactions
 
-        sensors = None
-        sensors = self.sensors.all(installation_id)  # pylint: disable=E1101
-        if sensors:
-            self.status["sensors"] = sensors
+        if sensors := self.sensors.all(installation_id):  # pylint: disable=E1101
+            status["sensors"] = sensors
 
-        lights = None
-        lights = self.lights.all(installation_id)  # pylint: disable=E1101
-        if lights:
-            self.status["lights"] = lights
+        if lights := self.lights.all(installation_id):  # pylint: disable=E1101
+            status["lights"] = lights
 
-        return self.status
+        return status

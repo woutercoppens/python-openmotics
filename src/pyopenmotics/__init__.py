@@ -5,7 +5,7 @@ import logging
 # import os
 # import sys
 # flake8: noqa
-from .openmotics import BackendClient, LegacyApplicationClient, ServiceClient
+from .openmotics import BackendClient, LegacyClient, ServiceClient
 
 # sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
@@ -13,7 +13,7 @@ from .openmotics import BackendClient, LegacyApplicationClient, ServiceClient
 __all__ = [
     "BackendClient",
     "ServiceClient",
-    "LegacyApplicationClient",
+    "LegacyClient",
 ]
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
